@@ -1,0 +1,122 @@
+Archivo README para el proyecto api_stands_tests:
+Este repositorio contiene pruebas automatizadas para verificar el correcto funcionamiento de la creación de usuario y kits en Urban Grocers, utilizando la documentación disponible en apiDOC.
+A continuación, se detallan los pasos necesarios para ejecutar las pruebas y las consideraciones importantes.
+
+Requisitos previos:
+Asegúrate de tener instalados los siguientes paquetes antes de ejecutar las pruebas:
+pytest: Para ejecutar las pruebas de manera automatizada.
+requests: Para realizar solicitudes HTTP al servicio web.
+Puedes instalar estos paquetes utilizando pip.
+
+
+configuration.py
+
+El servicio web al que se realizan las pruebas tiene la siguiente configuración:
+URL base del servicio: https://cnt-f6308937-0cfb-46ec-8602-e644b757a2eb.containerhub.tripleten-services.com
+Documentación del servicio: Puedes acceder a la documentación del servicio en la ruta /docs/.
+Registro de logs: Los registros principales del servicio se encuentran en la ruta /api/logs/main/.
+Datos de usuario: La información de los usuarios se almacena en el archivo CSV ubicado en /api/db/resources/user_model.csv.
+Creación de usuario: La creación de usuarios se realiza mediante solicitudes POST a la ruta /api/v1/users/.
+Kits de productos: Los kits de productos están disponibles en la ruta /api/v1/products/kits/.
+Creación de kits: Los kits se pueden crear haciendo solicitudes POST a la ruta /api/v1/kits.
+Para más detalles sobre cómo utilizar el servicio, consulta la documentación proporcionada en las API.
+
+
+data.py
+
+Este README proporciona información sobre cómo utilizar los diferentes elementos del código para interactuar con una API mediante solicitudes HTTP. A continuación se detallan los diferentes componentes y cómo pueden ser utilizados.
+Cabeceras (headers) - Para especificar el tipo de contenido en las solicitudes, utiliza el siguiente formato de cabecera, en el que se establece que el contenido de la solicitud será en formato JSON.
+Cuerpo de usuario (user_body) - Para crear un nuevo usuario en la API, puedes personalizar los campos firstName, phone y address según los datos que desees enviar para la creación del usuario.
+Nombre del Kit (kit Name) - Si deseas crear un kit con un nombre específico, sustituye "Kit con un nombre muy interesante" por el nombre deseado para tu kit.
+Token de Autenticación (Authentication Token) - Para autenticar las solicitudes a la API, incluye un token de autenticación en el cuerpo de la solicitud.
+
+
+sender_stand_request.py
+
+Uso de Funciones para Interactuar con la API
+Este README proporciona instrucciones sobre cómo utilizar las funciones definidas en el código para realizar solicitudes a una API y obtener respuestas. A continuación se detalla cómo utilizar las funciones disponibles.
+Configuración (Configuration)- El archivo configuration.py contiene la configuración necesaria para interactuar con la API. Asegúrate de que este archivo esté correctamente configurado con la URL del servicio y las rutas de los endpoints.
+Datos (Data) - El archivo data.py contiene datos necesarios para realizar las solicitudes, como los cuerpos de las solicitudes y los encabezados. Verifica que los datos proporcionados en este archivo sean correctos y coincidan con los requerimientos de la API.
+Función para Crear un Nuevo Usuario (post_new_user) - Utiliza la función post_new_user(body) para crear un nuevo usuario en la API. Esta función realiza una solicitud POST a la ruta de creación de usuarios especificada en la configuración.
+Asegúrate de proporcionar el cuerpo de la solicitud (body) con los datos del nuevo usuario que deseas crear.
+Función para Crear un Nuevo Kit de Producto (post_new_client_kit) - Utiliza la función post_new_client_kit(bodykit, token) para crear un nuevo kit de producto en la API. Esta función realiza una solicitud POST a la ruta de creación de kits especificada en la configuración.
+Asegúrate de proporcionar el cuerpo del kit (bodykit) con los datos necesarios para la creación del kit y el token de autenticación (token) para autorizar la solicitud.
+
+
+create_user_test.py
+
+README - Pruebas de Creación de Usuario en la API
+Este README proporciona información sobre las pruebas de creación de usuario implementadas en el código. Estas pruebas ayudan a garantizar que la API funcione correctamente y maneje adecuadamente diversos escenarios.
+
+Descripción General
+El código contiene funciones y pruebas para verificar la creación de usuarios en una API. A continuación se describen las funciones y las pruebas implementadas:
+
+Funciones
+get_user_body(first_name):
+Esta función se utiliza para cambiar el valor del parámetro firstName en el cuerpo de la solicitud. Toma el nombre de usuario como entrada y devuelve un diccionario actualizado con el nuevo valor de firstName.
+positive_assert(first_name):
+Esta función realiza una prueba positiva enviando una solicitud para crear un nuevo usuario con el nombre especificado. Verifica que la solicitud sea exitosa (código de estado 201), que el token de autenticación se genere correctamente y que el usuario se registre en la tabla de usuarios.
+negative_assert_symbol(first_name):
+Esta función realiza una prueba negativa enviando una solicitud con un nombre de usuario que contiene caracteres no permitidos. Verifica que la API responda con un código de estado 400 y un mensaje de error adecuado.
+negative_assert_no_firstname(user_body):
+Esta función realiza una prueba negativa enviando una solicitud sin el parámetro firstName. Verifica que la API responda con un código de estado 400 y un mensaje de error indicando que faltan parámetros.
+Pruebas
+Se han definido varias pruebas para verificar diferentes escenarios al crear un usuario en la API. Estas pruebas cubren casos positivos y negativos, como nombres de usuario válidos e inválidos, longitud incorrecta del nombre y tipos de datos incorrectos.
+
+Ejecución de las Pruebas
+Cada prueba está definida como una función individual. Para ejecutar las pruebas, sigue estos pasos:
+
+Asegúrate de que el archivo sender_stand_request.py y data.py estén disponibles en el mismo directorio que el archivo actual.
+Ejecuta el archivo que contiene las pruebas, por ejemplo, utilizando pytest u otro marco de prueba compatible.
+Pruebas Disponibles
+test_create_user_2_letter_in_first_name_get_success_response: Verifica la creación exitosa de un usuario con un nombre de dos letras.
+test_create_user_15_letter_in_first_name_get_success_response: Verifica la creación exitosa de un usuario con un nombre de quince letras.
+test_create_user_1_letter_in_first_name_get_error_response: Verifica que la API responda con un error cuando se proporciona un nombre de usuario de una letra.
+test_create_user_16_letter_in_first_name_get_error_response: Verifica que la API responda con un error cuando se proporciona un nombre de usuario de dieciséis letras.
+test_create_user_english_letter_in_first_name_get_success_response: Verifica la creación exitosa de un usuario con caracteres latinos en el nombre.
+test_create_user_has_special_symbol_in_first_name_get_error_response: Verifica que la API responda con un error cuando se proporciona un nombre de usuario que contiene caracteres especiales.
+test_create_user_has_number_in_first_name_get_error_response: Verifica que la API responda con un error cuando se proporciona un nombre de usuario que contiene números.
+test_create_user_no_first_name_get_error_response: Verifica que la API responda con un error cuando no se proporciona el parámetro firstName.
+test_create_user_empty_first_name_get_error_response: Verifica que la API responda con un error cuando se proporciona un nombre de usuario vacío.
+test_create_user_number_type_first_name_get_error_response: Verifica que la API responda con un error cuando se proporciona un tipo de dato incorrecto para el nombre de usuario.
+Sigue estas instrucciones para ejecutar las pruebas y verificar el funcionamiento de la API en diferentes escenarios.
+
+
+create_kit_name_test.py
+
+README - Pruebas de Creación de Kits de Producto en la API
+Este README proporciona información sobre las pruebas de creación de kits de producto implementadas en el código. Estas pruebas ayudan a garantizar que la API funcione correctamente y maneje adecuadamente diversos escenarios.
+
+Descripción General
+El código contiene funciones y pruebas para verificar la creación de kits de producto en una API. A continuación se describen las funciones y las pruebas implementadas:
+
+Funciones
+get_kit_body(kit_name, auth_token):
+Esta función se utiliza para obtener el cuerpo de la solicitud del kit de producto. Toma el nombre del kit y el token de autenticación como entrada, actualiza el cuerpo de la solicitud con el nombre del kit y devuelve el cuerpo de la solicitud y los encabezados actualizados.
+get_new_user_token():
+Esta función se utiliza para obtener el token de autenticación de un nuevo usuario. Realiza una solicitud para crear un nuevo usuario y extrae el token de autenticación de la respuesta.
+positive_assert(kit_name, auth_token):
+Esta función realiza una prueba positiva enviando una solicitud para crear un nuevo kit de producto con el nombre especificado. Verifica que la solicitud sea exitosa (código de estado 201) y que el nombre del kit en la respuesta coincida con el enviado.
+negative_assert_no_name(kit_name, auth_token):
+Esta función realiza una prueba negativa enviando una solicitud sin el nombre del kit. Verifica que la API responda con un código de estado 400 y un mensaje de error indicando que faltan parámetros.
+negative_assert_symbol(kit_name, auth_token):
+Esta función realiza una prueba negativa enviando una solicitud con un nombre de kit que contiene caracteres no permitidos. Verifica que la API responda con un código de estado 400 y un mensaje de error adecuado.
+Pruebas
+Se han definido varias pruebas para verificar diferentes escenarios al crear un kit de producto en la API. Estas pruebas cubren casos positivos y negativos, como nombres de kit válidos e inválidos, longitud incorrecta del nombre y tipos de datos incorrectos.
+
+Ejecución de las Pruebas
+Cada prueba está definida como una función individual. Para ejecutar las pruebas, sigue estos pasos:
+
+Asegúrate de que el archivo sender_stand_request.py y data.py estén disponibles en el mismo directorio que el archivo actual.
+Ejecuta el archivo que contiene las pruebas, por ejemplo, utilizando pytest u otro marco de prueba compatible.
+Pruebas Disponibles
+test_1_create_kit_1_letter_in_name_get_success_response: Verifica la creación exitosa de un kit con un nombre de una letra.
+test_2_create_kit_511_letter_in_name_get_success_response: Verifica la creación exitosa de un kit con un nombre de 511 letras.
+test_3_create_kit_0_letter_in_name_get_success_response: Verifica que la API responda con un error cuando no se proporciona el nombre del kit.
+test_4_create_kit_512_letter_in_name_get_success_response: Verifica que la API responda con un error cuando se proporciona un nombre de kit de 512 letras.
+test_5_create_kit_has_special_symbol_in_name_get_success_response: Verifica la creación exitosa de un kit con un nombre que contiene caracteres especiales.
+test_6_create_kit_has_space_in_name_get_success_response: Verifica la creación exitosa de un kit con un nombre que contiene espacios.
+test_7_create_kit_has_number_in_name_get_success_response: Verifica la creación exitosa de un kit con un nombre que contiene números.
+test_8_create_kit_no_string_in_name_get_error_response: Verifica que la API responda con un error cuando no se proporciona un string como nombre del kit.
+test_9_create_kit_has_dic_in_name_get_error_response: Verifica que la API responda con un error cuando se proporciona un diccionario como nombre del kit.
+Sigue estas instrucciones para ejecutar las pruebas y verificar el funcionamiento de la API en diferentes escenarios.
